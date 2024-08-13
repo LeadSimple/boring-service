@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    boring-service (1.0.0)
+    boring-service (1.0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -31,11 +31,11 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
+  boring-service!
   bundler (>= 1.12)
   pry
   rake (>= 10.0)
   rspec (~> 3.6)
-  boring-service!
 
 BUNDLED WITH
    2.4.10
