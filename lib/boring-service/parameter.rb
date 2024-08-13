@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SimpleService
+class BoringService
   class Parameter
     def initialize(name, type, options = {})
       invalid_options = options.keys - [:default]

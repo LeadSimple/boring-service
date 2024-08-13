@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe SimpleService::Parameter do
+RSpec.describe BoringService::Parameter do
   describe "#default?" do
     context "when the defined parameter includes a default" do
       parameter = described_class.new(:foo, String, default: "bar")

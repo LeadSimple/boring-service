@@ -1,15 +1,17 @@
-# SimpleService
+# BoringService
 
-Provides a lightweight standard implementation for the service-object pattern.
+Provides a lightweight, standard (quite frankly, boring) implementation for the service-object pattern.
 
 The benefits of using this over a [PORO](https://en.wikipedia.org/wiki/Plain_old_Java_object), besides having a standard way to define and run service-object methods, is the addition of parameter type-checking and before hooks.
+
+In every other way, this leaves you with vanilla, semantic Ruby. Boring is powerful.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'simpleservice'
+gem 'boring-service'
 ```
 
 And then execute:
@@ -18,14 +20,14 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install simpleservice
+    $ gem install boring-service
 
 ## Usage
 
 ### Parameters
 
 ```ruby
-class CalculationService < SimpleService
+class CalculationService < BoringService
   # Type checking is optional. If omitted, anything is accepted.
   # Type checking can also be done with a proc or anything that responds to #===
   # e.g. parameter :start_number, ->(p) { p.respond_to?(:to_i) }
@@ -54,13 +56,13 @@ end
 # the instance-method version of `call` (as it's defined in your service object).
 CalculationService.call(start_number: 1, end_number: 3) #=> 46
 CalculationService.call(start_number: 1)                #=> 45
-CalculationService.call(end_number: 3)                  #=> raise SimpleService::ParameterRequired
+CalculationService.call(end_number: 3)                  #=> raise BoringService::ParameterRequired
 ```
 
 ### Hooks
 
 ```ruby
-class RandomService < SimpleService
+class RandomService < BoringService
   # Before hooks may be defined as a Symbol method name (which calls the named method) or as a block
   before :set_start_time
   before { puts "Started at #{@start_time}" }
@@ -85,11 +87,11 @@ RandomService.call
 
 ### Errors
 
-* `SimpleService::ParameterRequired` is raised when a required parameter is not set on `call`
-* `SimpleService::InvalidParameterValue` is raised when a given value's type does not match the type specified for the parameter
-* `SimpleService::UnknownParameter` is raised when using an undefined parameter
+* `BoringService::ParameterRequired` is raised when a required parameter is not set on `call`
+* `BoringService::InvalidParameterValue` is raised when a given value's type does not match the type specified for the parameter
+* `BoringService::UnknownParameter` is raised when using an undefined parameter
 
-All these classes inherit from `SimpleService::ParameterError`, which inherits from `ArgumentError`.
+All these classes inherit from `BoringService::ParameterError`, which inherits from `ArgumentError`.
 
 
 ## Development
@@ -100,7 +102,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/LeadSimple/simple-service. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/LeadSimple/boring-service. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License

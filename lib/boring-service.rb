@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "simple-service/hooks"
-require 'simple-service/parameter'
+require "boring-service/hooks"
+require 'boring-service/parameter'
 
 # Provides a standard implementation for a service-object approach to abstracting large methods.
 #
 # @example Defining and invoking a method object
-#   class ComplexCalculation < SimpleService
+#   class ComplexCalculation < BoringService
 #     parameter :start_number, Integer
 #     parameter :end_number, Integer, default: 2
 #
@@ -24,7 +24,7 @@ require 'simple-service/parameter'
 #
 #   ComplexCalculation.call(start_number: 1, end_number: 3) #=> 46
 #   ComplexCalculation.call(start_number: 1) #=> 45
-#   ComplexCalculation.call(end_number: 3) #=> raise SimpleService::UnknownParameter
+#   ComplexCalculation.call(end_number: 3) #=> raise BoringService::UnknownParameter
 #
 #   calculation = ComplexCalculation.new(end_number: 3)
 #   calculation.start_number = 1
@@ -33,7 +33,7 @@ require 'simple-service/parameter'
 #   calculation.end_number = 2
 #   calculation.call # => 45
 #
-class SimpleService
+class BoringService
   ParameterError = Class.new(::ArgumentError)
   ParameterRequired = Class.new(ParameterError)
   InvalidParameterValue = Class.new(ParameterError)
@@ -42,7 +42,7 @@ class SimpleService
   include Hooks
 
   class << self
-    # Calls the SimpleService with the given arguments.
+    # Calls the BoringService with the given arguments.
     #
     # @param **args [Hash{Symbol => Object}] arguments to pass to the method
     # @return [Object] return value of the method object
@@ -65,7 +65,7 @@ class SimpleService
     #
     # @return [void]
     def parameter(name, type = BasicObject, **options)
-      arg = SimpleService::Parameter.new(name, type, options)
+      arg = BoringService::Parameter.new(name, type, options)
       parameters.delete(arg)
       parameters << arg
 
@@ -85,7 +85,7 @@ class SimpleService
 
     # @return [Set]
     def superclass_parameters
-      if superclass < SimpleService
+      if superclass < BoringService
         superclass.send(:parameters)
       else
         Set.new

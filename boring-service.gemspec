@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'simple-service/version'
+require 'boring-service/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "simple-service"
-  spec.version       = SimpleService::VERSION
+  spec.name          = "boring-service"
+  spec.version       = BoringService::VERSION
   spec.authors       = ["LeadSimple Engineering"]
   spec.email         = ["engineering@leadsimple.com"]
   spec.summary       = 'A simple implementation of the service-object pattern'

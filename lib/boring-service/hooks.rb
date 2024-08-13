@@ -1,4 +1,4 @@
-class SimpleService
+class BoringService
   module Hooks
     def self.included(base)
       base.class_eval do
@@ -16,7 +16,7 @@ class SimpleService
       #
       # Examples
       #
-      #   class MyService < SimpleService
+      #   class MyService < BoringService
       #     before :set_start_time
       #
       #     before do

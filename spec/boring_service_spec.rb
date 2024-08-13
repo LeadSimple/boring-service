@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class CustomService < SimpleService
+class CustomService < BoringService
   parameter :required_param, String
   parameter :optional_param, String, default: 'something'
 
@@ -21,18 +21,18 @@ class CustomService < SimpleService
   end
 end
 
-RSpec.describe SimpleService do
+RSpec.describe BoringService do
   describe ".call" do
     it "should raise an error if a required param is not passed" do
-      expect { CustomService.call }.to raise_error SimpleService::ParameterRequired
+      expect { CustomService.call }.to raise_error BoringService::ParameterRequired
     end
 
     it "should raise an error if a param is the wrong type" do
-      expect { CustomService.call(required_param: 5) }.to raise_error SimpleService::InvalidParameterValue
+      expect { CustomService.call(required_param: 5) }.to raise_error BoringService::InvalidParameterValue
     end
 
     it "should raise an error if an undefined param is passed" do
-      expect { CustomService.call(undefined_param: 5) }.to raise_error SimpleService::UnknownParameter
+      expect { CustomService.call(undefined_param: 5) }.to raise_error BoringService::UnknownParameter
     end
 
     it "should call before hooks in the order that they're defined" do
@@ -42,7 +42,7 @@ RSpec.describe SimpleService do
     end
 
     it "should throw an error if the `.call` method is not overridden" do
-      class BadService < SimpleService; end
+      class BadService < BoringService; end
 
       expect { BadService.call }.to raise_error NotImplementedError
     end
