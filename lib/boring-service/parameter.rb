@@ -32,8 +32,13 @@ class BoringService
       end
     end
 
+    # rubocop:disable Style/CaseEquality
     def acceptable?(value)
-      (value.nil? && nullable?) || type === value # rubocop:disable Style/CaseEquality
+      if type.is_a?(Array)
+        type.any? { |t| t === value } 
+      else 
+        (value.nil? && nullable?) || type === value 
+      end
     end
 
     def nullable?
