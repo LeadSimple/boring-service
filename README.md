@@ -26,17 +26,31 @@ Or install it yourself as:
 
 ### Parameters
 
+#### Defining Parameters
+```ruby
+class RandomService < BoringService
+  # Type checking is optional. If omitted, anything is accepted.
+  parameter :random_object
+
+  def call
+    random_object&.class
+  end
+end
+
+# The class-method version of `call` accepts the arguments as named parameters and, subsequently, calls the
+# instance-method version of `call` (as it's defined in your service class).
+RandomService.call                        #=> raise BoringService::ParameterRequired
+RandomService.call(random_object: 'test') #=> String
+RandomService.call(random_object: 1)      #=> Integer
+```
+
+#### Basic Parameter Type Checking
 ```ruby
 class CalculationService < BoringService
-  # Type checking is optional. If omitted, anything is accepted.
-  # Type checking can also be done with a proc or anything that responds to #===
-  # e.g. parameter :start_number, ->(p) { p.respond_to?(:to_i) }
+  # If a type checking Class is provided, the type check will be enforced against the defined parameter.
   parameter :start_number, Integer
 
-  # Parameters that define a default are optional.
-  # `default` supports also a proc, that gets evaluated at
-  # object instantiation.
-  # e.g. default: -> { Time.now }
+  # Parameters that define a `default` are optional.
   parameter :end_number, Integer, default: 2
 
   def call
@@ -52,11 +66,37 @@ class CalculationService < BoringService
   end
 end
 
-# The class-method version of `call` accepts the arguments as named parameters and, subsequently, calls
-# the instance-method version of `call` (as it's defined in your service object).
 CalculationService.call(start_number: 1, end_number: 3) #=> 46
 CalculationService.call(start_number: 1)                #=> 45
+CalculationService.call(start_number: '1')              #=> BoringService::InvalidParameterValue
 CalculationService.call(end_number: 3)                  #=> raise BoringService::ParameterRequired
+```
+
+#### Advanced Options for Parameter Type Checking
+```ruby
+class MoreOptionsService < BoringService
+  # Type checking can also be done with an Array of classes, a proc/lambda, or anything that responds to #===.
+  parameter :times_to_run, [String, Integer]
+  parameter :return_output, -> (param) { param.in?([true, false]) }
+
+  # `default` also supports a proc/lambda, that gets evaluated at object instantiation.
+  parameter :timestamp, Time, default: -> { Time.now.beginning_of_day }
+
+  def call
+    Array.new(times_to_run.to_i) { timestamp if return_output }
+  end
+end
+
+MoreOptionsService.call(times_to_run: 1, return_output: true)    #=> [2024-08-30 00:00:00 -0400]
+MoreOptionsService.call(times_to_run: 1, return_output: false)   #=> [nil]
+MoreOptionsService.call(times_to_run: 5, return_output: false)   #=> [nil, nil, nil, nil, nil]
+MoreOptionsService.call(times_to_run: '5', return_output: false) #=> [nil, nil, nil, nil, nil]
+MoreOptionsService.call(times_to_run: 5, return_output: 'false') #=> raise BoringService::InvalidParameterValue
+MoreOptionsService.call(
+  times_to_run: 1, 
+  return_output: true, 
+  timestamp: Time.now.beginning_of_day - 1.day
+)                                                                #=> [2024-08-29 00:00:00 -0400]
 ```
 
 ### Hooks

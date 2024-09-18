@@ -57,8 +57,8 @@ class BoringService
     # Parameters are also inherited from superclasses and can be redefined (overwritten) in subclasses.
     #
     # @param name [Symbol] name of the parameter
-    # @param type [Class, #===] type of the parameter. Can be a Class, a Proc or anything that defines a meaningful
-    #   `===` method
+    # @param type [Class, Array, #===] type of the parameter. Can be a Class, an Array of classes, a Proc, or anything
+    # that defines a meaningful `===` method.
     # @param **options [Hash] extra options for the parameter
     # @option **options [Object, #call] :default default value if the parameter is not passed. If the default implements
     #   `#call`, it gets called once in the context of the method object instance when it is instantiated.
